@@ -1,5 +1,5 @@
 {
-    "name": "SuperOrange/kerio-api-php",
+    "name": "kerio/api-php",
     "description": "Kerio APIs Client Library for PHP",
     "require": {
         "php": ">=5.3.0"
