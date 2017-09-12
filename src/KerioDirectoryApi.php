@@ -12,7 +12,10 @@
  * Any changes may be overwritten by a new version.
  */
 
-require_once(dirname(__FILE__) . '/class/KerioApi.php');
+namespace Kerio\Api;
+
+use Kerio\Api\Http\KerioApi;
+use Kerio\Api\Http\KerioApiException;
 
 /**
  * Administration API for Kerio Directory.
@@ -27,7 +30,7 @@ require_once(dirname(__FILE__) . '/class/KerioApi.php');
  * Example:
  * <code>
  * <?php
- * require_once(dirname(__FILE__) . '/src/KerioDirectory.php');
+ * use Kerio\Api\KerioDirectory;
  *
  * $api = new KerioDirectory('Sample application', 'Company Ltd.', '1.0');
  *
@@ -41,43 +44,44 @@ require_once(dirname(__FILE__) . '/class/KerioApi.php');
  * ?>
  * </code>
  *
- * @copyright	Copyright &copy; 2012-2012 Kerio Technologies s.r.o.
- * @license		http://www.kerio.com/developers/license/sdk-agreement
- * @version		1.4.0.234
+ * @copyright Copyright &copy; 2012-2012 Kerio Technologies s.r.o.
+ * @license http://www.kerio.com/developers/license/sdk-agreement
+ * @version 1.4.0.234
  */
-class KerioDirectoryApi extends KerioApi {
+class KerioDirectoryApi extends KerioApi
+{
+    /**
+     * Defines product-specific JSON-RPC settings
+     * @var array
+     */
+    protected $jsonRpc = array(
+        'version' => '2.0',
+        'port' => 4101,
+        'api' => '/admin/jsonrpc/'
+    );
 
-	/**
-	 * Defines product-specific JSON-RPC settings
-	 * @var array
-	 */
-	protected $jsonRpc = array(
-		'version'	=> '2.0',
-		'port'		=> 4101,
-		'api'		=> '/admin/jsonrpc/'
-	);
+    /**
+     * Class constructor.
+     *
+     * @param string $name Application name
+     * @param string $vendor Application vendor
+     * @param string $version Application version
+     *
+     * @throws KerioApiException
+     */
+    public function __construct($name, $vendor, $version)
+    {
+        parent::__construct($name, $vendor, $version);
+    }
 
-	/**
-	 * Class constructor.
-	 *
-	 * @param	string	Application name
-	 * @param	string	Application vendor
-	 * @param	string	Application version
-	 * @return	void
-	 * @throws	KerioApiException
-	 */
-	public function __construct($name, $vendor, $version) {
-		parent::__construct($name, $vendor, $version);
-	}
-
-	/**
-	 * Get constants defined by product.
-	 *
-	 * @param	void
-	 * @return	array	Array of constants
-	 */
-	public function getConstants() {
-		$response = $this->sendRequest('Server.getInfo');
-		return $response['serverInfo'];
-	}
+    /**
+     * Get constants defined by product.
+     *
+     * @return array Array of constants
+     */
+    public function getConstants()
+    {
+        $response = $this->sendRequest('Server.getInfo');
+        return $response['serverInfo'];
+    }
 }
